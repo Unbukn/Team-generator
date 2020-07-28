@@ -11,88 +11,99 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
-const { isNumber } = require("util");
-const { registerPrompt } = require("inquirer");
 
+
+// array for team members
 var allTeamMembers = [];
+// array for member Ids
+var teamIds = [];
 
-inquirer.prompt([
-    {
-        // prompt for the manager name
-        type: "input",
-        name: "managerName",
-        message: "What's the name of the project manager(PM)",
-        validate: userEntry => {
-            // if user response is not nothing
-            if(userEntry !== ""){
-                return true;
-            }
-            return "You have to provide a name for the manager?";
+// function for entire application
+function teamBuilder(params) {
+    // manager prompts 
+    function makeManager(params) {
+        // prompt for manager
+    inquirer.prompt([
+        {
+            // prompt for the manager name
+            type: "input",
+            name: "managerName",
+            message: "What's the name of the project manager(PM)",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(userEntry !== ""){
+                    return true;
+                }
+                return "You have to provide a name for the manager?";
+            },
+            default: ""
         },
-        default: ""
-    },
-    {
-        // ask for manager's Id
-        type: "input",
-        name: "managerId",
-        message: "What's the manager's Id number?",
-        validate: userEntry => {
-            // if user response is not nothing
-            if(validator.isNumeric(userEntry)){
-                return true;
-            }
-            return "That's not a valid number!";
+        {
+            // ask for manager's Id
+            type: "input",
+            name: "managerId",
+            message: "What's the manager's Id number?",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(validator.isNumeric(userEntry)){
+                    return true;
+                }
+                return "That's not a valid number!";
+            },
+            default: ""
         },
-        default: ""
-    },
-    {
-        // ask for manager's email
-        type: "input",
-        name: "managerEmail",
-        message: "What's the manager's email address?",
-        validate: userEntry => {
-            // if user response is not nothing
-            if(validator.isEmail(userEntry)){
-                return true;
-            }
-            return "That's not a valid email address!";
+        {
+            // ask for manager's email
+            type: "input",
+            name: "managerEmail",
+            message: "What's the manager's email address?",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(validator.isEmail(userEntry)){
+                    return true;
+                }
+                return "That's not a valid email address!";
+            },
+            default: ""
         },
-        default: ""
-    },
-    {
-        // ask for manager's office number
-        type: "input",
-        name: "managerOffice",
-        message: "What's the manager's office number?",
-        validate: userEntry => {
-            // if user response is not nothing
-            if(validator.isNumeric(userEntry)){
-                return true;
-            }
-            return "That's not a valid number!";
+        {
+            // ask for manager's office number
+            type: "input",
+            name: "managerOffice",
+            message: "What's the manager's office number?",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(validator.isNumeric(userEntry)){
+                    return true;
+                }
+                return "That's not a valid number!";
+            },
+            default: ""
         },
-        default: ""
-    },
-  ])
-  .then(answers => {
-    // create new class for the manager with user input
-    const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOffice);
-    // push the new manager class to allTeamMembers object array
-    allTeamMembers.push(manager);
-    // create the rest of the team 
-    makeTeam() // prompt the user for the rest of the team members
-  })
-  .catch(error => {
-    if(error.isTtyError) {
-      // Prompt couldn't be rendered in the current environment
-      return console.log(error.message)
-    } else {
-      // Something else when wrong
-        return "unknown error occurred"
+    ]).then(answers => {
+        // create new class for the manager with user input
+        const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOffice);
+        // push the new manager class to allTeamMembers object array
+        allTeamMembers.push(manager);
+        // create the rest of the team 
+        makeTeam() // prompt the user for the rest of the team members
+    }).catch(error => {
+        if(error.isTtyError) {
+        // Prompt couldn't be rendered in the current environment
+        return console.log(error.message)
+        } else {
+        // Something else when wrong
+            return "unknown error occurred"
+        }
+    });
     }
-  });
-// ************** prompt user for the rest of the team members ****************** 
 
+    
+
+
+
+
+// ************** prompt user for the rest of the team members ****************** 
 function makeTeam() {
     inquirer.prompt([
     {
@@ -103,10 +114,9 @@ function makeTeam() {
         "Engineer",
         "Intern",
         "No additional members need to be added."
-        ],
-        default: ""
+        ]
     }
-      ]).then(answers => {
+    ]).then(answers => {
         switch(answers.memberType) {
         case "Engineer":
             // make a new engineer
@@ -117,10 +127,161 @@ function makeTeam() {
           newIntern();
           break;
         default:
-            // generate the team
+            // generate the entire team
           generateTeam();
+        }
+      }).catch(error => {
+        if(error.isTtyError) {
+          // Prompt couldn't be rendered in the current environment
+          return console.log(error.message)
+        } else {
+          // Something else when wrong
+            return "unknown error occurred"
         }
       });
 
 };
-  
+
+// ************** new engineer team member ****************** 
+function newEng() {
+inquirer.prompt([
+    {
+        type: "input",
+        name: "engName",
+        message: "What is the name of the Engineer?",
+        validate: userEntry => {
+            // if user response is not nothing
+            if(userEntry !== ""){
+                return true;
+            }
+            return "The name cannot be blank!";
+        },
+        default: ""
+    },
+    {
+        type: "input",
+        name: "engId",
+        message: "What is the Engineer's Id?",
+        validate: userEntry => {
+            // if user response is not nothing
+            if(validator.isNumeric(userEntry)){
+                return true;
+            }
+            return "The id must be a numeric value!";
+        },
+        default: ""        
+    },
+    {
+        type: "input",
+        name: "engEmail",
+        message: "What is the Engineer's email address?",
+        validate: userEntry => {
+            // if user response is not nothing
+            if(validator.isEmail(userEntry)){
+                return true;
+            }
+            return "That is not a valid email address";
+        },
+        default: ""        
+    },
+    {
+        type: "input",
+        name: "engGithub",
+        message: "What is the Engineer's github username",
+        validate: userEntry => {
+            // if user response is not nothing
+            if(userEntry !== ""){
+                return true;
+            }
+            return "Please enter the engineer's Github username";
+        },
+        default: ""        
+    }                   
+])
+  .then(answers => {
+    //   create new engineer class with user entered data
+    const eng = new Engineer(answers.engName, answers.engId, answers.engEmail, answers.engGithub);
+    // push the class to the team array
+    allTeamMembers.push(eng);
+
+    // check if more team members are needed
+      makeTeam();
+  });
+};
+
+// ************** new intern team member ****************** 
+function newIntern() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "internName",
+            message: "What is the name of the intern?",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(userEntry !== ""){
+                    return true;
+                }
+                return "The name cannot be blank!";
+            },
+            default: ""
+        },
+        {
+            type: "input",
+            name: "internId",
+            message: "What is the intern's Id?",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(validator.isNumeric(userEntry)){
+                    return true;
+                }
+                return "The id must be a numeric value!";
+            },
+            default: ""        
+        },
+        {
+            type: "input",
+            name: "internEmail",
+            message: "What is the intern's email address?",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(validator.isEmail(userEntry)){
+                    return true;
+                }
+                return "That is not a valid email address";
+            },
+            default: ""        
+        },
+        {
+            type: "input",
+            name: "internSchool",
+            message: "What school is this intern currently attending?",
+            validate: userEntry => {
+                // if user response is not nothing
+                if(userEntry !== ""){
+                    return true;
+                }
+                return "Please enter a school";
+            },
+            default: ""        
+        }                   
+    ])
+      .then(answers => {
+        //   create new intern class with user entered data
+        const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
+        // push the class to the team array
+        allTeamMembers.push(intern);
+        // check if more team members are needed
+          makeTeam();
+      });
+};
+
+// ******** Generate the team *******
+function generateTeam() {
+        fs.writeFileSync(outputPath, render(allTeamMembers), "utf-8");
+};
+
+makeManager();
+
+}
+
+teamBuilder();
