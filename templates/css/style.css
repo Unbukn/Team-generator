@@ -3,5 +3,8 @@ body{
     font-family: 'Quicksand', sans-serif;
 }
 .employee-card{
-    margin: 5px;
+    margin: 3px;
+}
+.team-heading{
+    font-family: 'Roboto Slab', serif;
 }
