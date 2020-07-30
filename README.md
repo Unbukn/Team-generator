@@ -95,12 +95,10 @@ This application was developed by James Hudgins. TEAM-GENERATOR was made possibl
 * [Node.js](https://nodejs.org/api/fs.html)
 * [Validator](https://www.npmjs.com/package/validator)
 * [Inquirer,js](https://www.npmjs.com/package/inquirer)
-* [Terminal-link](https://www.npmjs.com/package/terminal-link)
 * [Shields.io](https://shields.io/)
 * [youtube](https://youtube.com)
 
 ## Tests
-There are currently no tests available for this version of README_MAKER.
 run the tests by entering: 
 ```
 npm run test
