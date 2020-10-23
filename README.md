@@ -1,7 +1,7 @@
 # Team Generator
 
 #### Video Demo
-[![Desktop html output](./assets/Team-gen-videolink.png)](https://youtu.be/J7d4WhcN1SA)
+[![Desktop html output](https://imgur.com/d3R81fz.png)](https://youtu.be/J7d4WhcN1SA)
 
 ## Description     
 A Node CLI that takes in information about employees and generates an HTML webpage that displays summaries for each employee.
